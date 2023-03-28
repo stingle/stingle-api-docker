@@ -1,0 +1,6 @@
+/addons/
+/backups/
+/configsSite/*
+.idea
+.env
+.vscode
