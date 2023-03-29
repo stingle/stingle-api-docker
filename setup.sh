@@ -71,7 +71,7 @@ if [ ! -f $ENV_FILE_LOCATION ]; then
 
   MYSQL_ROOT_PASSWORD=$(tr -cd '[:alnum:]' </dev/urandom | fold -w32 | head -n 1)
   MYSQL_USER_PASSWORD=$(tr -cd '[:alnum:]' </dev/urandom | fold -w32 | head -n 1)
-  CONTAINER_NAME=stingle_api
+  CONTAINER_NAME=stingle-api
 
   echo -e "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" >> $ENV_FILE_LOCATION
   echo -e "MYSQL_USER_PASSWORD=$MYSQL_USER_PASSWORD" >> $ENV_FILE_LOCATION
@@ -81,5 +81,5 @@ else
 fi
 
 docker compose -p $CONTAINER_NAME up -d
-docker exec -it $CONTAINER_NAME"-web-1" bash -c "cd /var/www/html/ && composer install --ignore-platform-reqs --no-interaction"
+docker exec -it $CONTAINER_NAME"-web-1" composer install --ignore-platform-reqs --no-interaction
 docker exec -it $CONTAINER_NAME"-web-1" bash -c "/var/www/html/bin/setup.php --full --mysqlPass=$MYSQL_USER_PASSWORD"

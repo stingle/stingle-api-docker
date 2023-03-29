@@ -17,7 +17,7 @@ services:
       - "vendor:/var/www/html/vendor"
   mysql-server:
     restart: always
-    image: mysql:5.7
+    image: mysql:8-debian
     volumes:
       - "mysql:/var/lib/mysql"
     environment:
