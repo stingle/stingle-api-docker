@@ -1,3 +1,3 @@
 #!/bin/bash
 source .env
-docker compose -p $CONTAINER_NAME up -d
+docker compose $COMPOSE_PARAMS -p $CONTAINER_NAME up -d

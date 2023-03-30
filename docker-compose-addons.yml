@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  web:
+    volumes:
+      - "./addons:/var/www/html/addons"
+      - "./backups:/var/www/html/backups"
+      - "./configsSite:/var/www/html/configsSite"
+      - "./.env:/var/www/html/.env"
+      - "crond:/etc/cron.d"
+      - "letsencrypt:/etc/letsencrypt"
+      - "apachesites:/etc/apache2/sites-enabled"
+      - "vendor:/var/www/html/vendor"
+      - "./composer:/var/www/html/composer"

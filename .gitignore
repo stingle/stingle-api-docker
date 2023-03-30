@@ -1,6 +1,7 @@
 /addons/
 /backups/
 /configsSite/*
+/composer/*
 .idea
 .env
 .vscode
