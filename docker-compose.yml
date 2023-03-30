@@ -13,7 +13,7 @@ services:
       - "./.env:/var/www/html/.env"
       - "crond:/etc/cron.d"
       - "letsencrypt:/etc/letsencrypt"
-      - "apachesites:/etc/apache2/sites-enabled"
+      - "apache:/etc/apache2/"
       - "vendor:/var/www/html/vendor"
   mysql-server:
     restart: always
@@ -46,5 +46,5 @@ volumes:
   mysql: { }
   crond: { }
   letsencrypt: { }
-  apachesites: { }
+  apache: { }
   vendor: { }
