@@ -74,14 +74,14 @@ if [ ! -f $ENV_FILE_LOCATION ]; then
   CONTAINER_NAME=stingle-api
   COMPOSE_PARAMS=
 
-  echo -e "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" >> $ENV_FILE_LOCATION
-  echo -e "MYSQL_USER_PASSWORD=$MYSQL_USER_PASSWORD" >> $ENV_FILE_LOCATION
-  echo -e "CONTAINER_NAME=$CONTAINER_NAME" >> $ENV_FILE_LOCATION
+  echo -e "MYSQL_ROOT_PASSWORD=\"$MYSQL_ROOT_PASSWORD\"" >> $ENV_FILE_LOCATION
+  echo -e "MYSQL_USER_PASSWORD=\"$MYSQL_USER_PASSWORD\"" >> $ENV_FILE_LOCATION
+  echo -e "CONTAINER_NAME=\"$CONTAINER_NAME\"" >> $ENV_FILE_LOCATION
   echo -e "COMPOSE_PARAMS=" >> $ENV_FILE_LOCATION
 else
   source $ENV_FILE_LOCATION
 fi
 
 docker compose -p $CONTAINER_NAME up -d
-docker exec -it $CONTAINER_NAME"-web-1" composer install --ignore-platform-reqs --no-interaction
-docker exec -it $CONTAINER_NAME"-web-1" bash -c "/var/www/html/bin/setup.php --full --mysqlPass='$MYSQL_USER_PASSWORD'"
+docker exec -it $CONTAINER_NAME"-web-1" composer install --no-interaction
+docker exec -it $CONTAINER_NAME"-web-1" bash -c "/var/www/html/bin/setup.php --full --mysqlPass=\"$MYSQL_USER_PASSWORD\""
