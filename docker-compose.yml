@@ -10,7 +10,6 @@ services:
       - "./addons:/var/www/html/addons"
       - "./backups:/var/www/html/backups"
       - "./configsSite:/var/www/html/configsSite"
-      - "./.env:/var/www/html/.env"
       - "crond:/etc/cron.d"
       - "letsencrypt:/etc/letsencrypt"
       - "apache:/etc/apache2/"
