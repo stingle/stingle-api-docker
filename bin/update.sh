@@ -1,5 +1,6 @@
 #!/bin/bash
 source .env
+git pull
 docker pull stingle/stingle-api:latest
 bin/dockerStop.sh
 bin/dockerStart.sh
