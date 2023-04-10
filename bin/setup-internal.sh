@@ -1,3 +1,3 @@
 #!/bin/bash
 source .env
-docker exec -it $CONTAINER_NAME"-web-1" bash -c "cd /var/www/html/ && ./bin/setup.php $@"
+docker compose -p $CONTAINER_NAME exec web bash -c "cd /var/www/html/ && ./bin/setup.php $@"

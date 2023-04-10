@@ -63,6 +63,14 @@ ssh -L 8800:127.0.0.1:8082 root@stingleapiserver.domain
 Then access it from browser, by going to:
 `http://localhost:8800/`
 
+## Changing default space quota
+By default, each user is allowed to use 1GB of space. If you want to change that, you can do so by editing `config.override.inc.php` file. You will find a line that looks like this:
+
+```php
+$CONFIG['Users']['SiteUser']['AuxConfig']['defaultQuota'] = 1024; // In MB
+```
+
+
 ## Addons
 If you have any addons present in `addons/` folder, then please change `COMPOSE_PARAMS` in `.env` file to:
 
