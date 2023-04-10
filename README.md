@@ -70,6 +70,22 @@ By default, each user is allowed to use 1GB of space. If you want to change that
 $CONFIG['Users']['SiteUser']['AuxConfig']['defaultQuota'] = 1024; // In MB
 ```
 
+### Changing default space quota for a specific user
+To change space quota for individual user, you wiil have to run following command:
+
+```bash
+bin/setBaseQuota.sh email="test@example.com" quota=1T
+```
+Where `email` is a user's email address and `quota` is a new quota in gigabytes(G) or terabytes(T).
+In this example this command will set user's quota to 1TB.
+
+## Deleting user
+To delete a user, you will have to run following command:
+
+```bash
+bin/deleteUser.sh email="email@example.com"
+```
+
 
 ## Addons
 If you have any addons present in `addons/` folder, then please change `COMPOSE_PARAMS` in `.env` file to:
