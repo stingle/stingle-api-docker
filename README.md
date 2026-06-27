@@ -117,10 +117,28 @@ The server then checks each addon out at its pinned commit, uses the merged lock
 To enable it, set in `.env` (the private repo URL is yours; it never appears in this public repo):
 
 ```bash
-MANIFEST_REPO="git@github.com:youraccount/your-manifest.git"
+MANIFEST_REPO="git@your-manifest-repo:youraccount/your-manifest-repo.git"
 COMPOSE_PARAMS="-f docker-compose.yml -f docker-compose-addons.yml"
 ```
 
-`bin/update.sh` (and first-time `setup.sh`) will then clone the manifest, pin addons + lock + image from it, and install. The server needs `jq` and SSH/deploy-key access to the manifest and addon repositories.
+`bin/update.sh` (and first-time `setup.sh`) will then clone the manifest, pin addons + lock + image from it, and install.
+
+The server needs `jq` and read access to the **manifest repo plus each addon repo**. A GitHub deploy key is unique to one repo, so use one key per repo with SSH host aliases named after the repo, e.g. in `~/.ssh/config`:
+
+```sshconfig
+Host your-manifest-repo
+    HostName github.com
+    IdentityFile ~/.ssh/your-manifest-repo.deploykey
+    IdentitiesOnly yes
+
+Host addon-example
+    HostName github.com
+    IdentityFile ~/.ssh/addon-example.deploykey
+    IdentitiesOnly yes
+```
+
+Clone URLs then use the alias as the host (`git@<alias>:org/<repo>.git`); the manifest's `sources.json` lists each addon by the same alias. (Alternatively, use a single machine-user account with read on all the repos.)
+
+**Leaving `MANIFEST_REPO` empty keeps the default behaviour above** — the manifest path is entirely opt-in, so a vanilla install with no addons needs none of this.
 
 **Leaving `MANIFEST_REPO` empty keeps the default behaviour above** — the manifest path is entirely opt-in, so a vanilla install with no addons needs none of this.
