@@ -78,10 +78,21 @@ if [ ! -f $ENV_FILE_LOCATION ]; then
   echo -e "MYSQL_USER_PASSWORD=\"$MYSQL_USER_PASSWORD\"" >> $ENV_FILE_LOCATION
   echo -e "CONTAINER_NAME=\"$CONTAINER_NAME\"" >> $ENV_FILE_LOCATION
   echo -e "COMPOSE_PARAMS=" >> $ENV_FILE_LOCATION
-else
-  source $ENV_FILE_LOCATION
+  echo -e "MANIFEST_REPO=" >> $ENV_FILE_LOCATION
 fi
+source $ENV_FILE_LOCATION
 
-docker compose -p $CONTAINER_NAME up -d
+# When a private composition manifest is configured (MANIFEST_REPO in .env), pin
+# addons + composer.lock + core image from it; otherwise this is a no-op and the
+# install proceeds from the public image's baked-in lock.
+WEB_IMAGE="stingle/stingle-api:latest"
+if [ -n "${MANIFEST_REPO:-}" ]; then
+  command -v jq >/dev/null || apt-get install -y jq || true
+  bin/applyManifest.sh
+  WEB_IMAGE="$(jq -r '.core.image' manifest/manifest.json)"
+fi
+export WEB_IMAGE
+
+docker compose $COMPOSE_PARAMS -p $CONTAINER_NAME up -d
 docker exec -it $CONTAINER_NAME"-web-1" composer install --no-interaction
 docker exec -it $CONTAINER_NAME"-web-1" bash -c "/var/www/html/bin/setup.php --full --mysqlPass=\"$MYSQL_USER_PASSWORD\""

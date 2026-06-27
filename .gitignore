@@ -2,6 +2,7 @@
 /backups/
 /configsSite/*
 /composer/*
+/manifest/
 .idea
 .env
 .vscode

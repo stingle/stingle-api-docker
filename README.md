@@ -101,3 +101,26 @@ After installing a new addon, typically you want to update the composer dependen
 ```
 
 Composer is configured in such a way that it will automatically scan all folders in `addons/` folder and will find and merge all `composer.json` files.
+
+> **Note:** running `composer update` resolves dependencies live on the server, which is not reproducible. For a deterministic, repeatable deployment of one or more (private) addons, use a composition manifest instead — see below.
+
+### Reproducible addon deploys with a composition manifest (optional)
+
+Addons are merged into a **single** shared `composer.lock`. That merged lock is specific to *your* set of addons, so it can't live in this public repo or in the public app image. Instead it lives in a small **private** "manifest" repo that pins, for one deployment:
+
+- the core app image by **digest**,
+- each addon repository at an exact **commit**, and
+- the resulting merged `composer.lock`.
+
+The server then checks each addon out at its pinned commit, uses the merged lock, and runs `composer install` only — never `composer update`. Because it installs exactly the code the lock was built from, the deployment is fully reproducible.
+
+To enable it, set in `.env` (the private repo URL is yours; it never appears in this public repo):
+
+```bash
+MANIFEST_REPO="git@github.com:youraccount/your-manifest.git"
+COMPOSE_PARAMS="-f docker-compose.yml -f docker-compose-addons.yml"
+```
+
+`bin/update.sh` (and first-time `setup.sh`) will then clone the manifest, pin addons + lock + image from it, and install. The server needs `jq` and SSH/deploy-key access to the manifest and addon repositories.
+
+**Leaving `MANIFEST_REPO` empty keeps the default behaviour above** — the manifest path is entirely opt-in, so a vanilla install with no addons needs none of this.
